@@ -1,37 +1,37 @@
 pipeline {
-    
-    agent { 
-        docker { 
-            image 'node:18' 
-            args '-u root:root' 
-        } 
+
+    agent {
+        docker {
+            image 'node:22-alpine'
+            args '-u root:root'
+        }
     }
 
-   stages {
+    environment {
+        PUPPETEER_EXECUTABLE_PATH = '/usr/bin/chromium'
+    }
 
-    stage('Dependecies install') {
+    stages {
 
-        steps {
-            sh 'npm install'
+        stage('Dependencies install') {
+            steps {
+                sh '''
+                    apk add --no-cache chromium
+                    npm ci
+                '''
+            }
         }
 
-    }
-
-    stage('Test') {
-        
-        steps {
-            sh 'npm test'
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
         }
 
-    }
-
-    stage('Package') {
-        
-        steps {
-            sh 'npm pack'
+        stage('Package') {
+            steps {
+                sh 'npm pack'
+            }
         }
-
     }
-
-   }
 }
