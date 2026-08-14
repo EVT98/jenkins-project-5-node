@@ -11,6 +11,13 @@ pipeline{
                 sh 'npm install'
             }
         }
+
+        stage("test"){
+            steps{
+                sh 'npm test'
+            }
+        }
+
         stage('package'){
             steps{
                 sh 'rm -rf my-app-*.tgz || echo ""'
