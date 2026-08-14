@@ -2,7 +2,7 @@ pipeline {
 
     agent {
         docker {
-            image 'node:22-alpine'
+            image 'node-chromium:22'
         }
     }
 
@@ -15,6 +15,7 @@ pipeline {
     stages {
 
         stage('Dependencies install') {
+
             steps {
                 sh '''
                     apk add --no-cache chromium
