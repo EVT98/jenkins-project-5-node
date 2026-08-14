@@ -17,10 +17,7 @@ pipeline {
         stage('Dependencies install') {
 
             steps {
-                sh '''
-                    apk add --no-cache chromium
-                    npm ci
-                '''
+                sh 'npm ci'
             }
         }
 
