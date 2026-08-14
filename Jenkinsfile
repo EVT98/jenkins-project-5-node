@@ -1,10 +1,6 @@
 pipeline {
    
-   agent { docker { image 'node:22-alpine'  } } // or agent { docker { image 'node:22-alpine' args '-u root:root' } } but I have to delete the env variable
-
-   environment {
-    HOME = "${WORKSPACE}"
-    }
+   agent { docker { image 'node:22-alpine' args '-u root:root' } } but I have to delete the env variable
 
    stages {
 
