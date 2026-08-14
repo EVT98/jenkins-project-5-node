@@ -1,6 +1,6 @@
 pipeline {
    
-   agent { docker { image 'node:22-alpine' } } // or agent { docker { image 'node:22-alpine' args '-u root:root' } } but I have to delete the env variable
+   agent { docker { image 'node:22-alpine'  } } // or agent { docker { image 'node:22-alpine' args '-u root:root' } } but I have to delete the env variable
 
    environment {
     HOME = "${WORKSPACE}"
@@ -11,7 +11,7 @@ pipeline {
     stage('Dependecies install') {
 
         steps {
-            sh 'npm install'
+            sh 'npm ci'
         }
 
     }
