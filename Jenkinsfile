@@ -12,43 +12,29 @@ pipeline {
 
     stages {
 
-        stage("dependancies install") {
+        stage('dependencies install') {
             steps {
                 sh 'npm ci'
             }
         }
 
-        stage("start application") {
+        stage('start app') {
             steps {
-                sh '''
-                    npm start > app.log 2>&1 &
-                    echo $! > app.pid
-                    sleep 5
-                '''
+                sh 'npm start &'
+                sh 'sleep 5'
             }
         }
 
-        stage("test") {
+        stage('test') {
             steps {
                 sh 'npm test -- --timeout 30000'
             }
         }
 
-        stage("package") {
+        stage('package') {
             steps {
-                sh 'rm -f my-app-*.tgz'
                 sh 'npm pack'
             }
-        }
-    }
-
-    post {
-        always {
-            sh '''
-                if [ -f app.pid ]; then
-                    kill $(cat app.pid) || true
-                fi
-            '''
         }
     }
 }
