@@ -44,7 +44,8 @@ pipeline {
             steps {
                 sh 'curl -uadmin:APf9HA8iGMfnNpDqqWwUJhoFG1 -T \
                  "/var/lib/jenkins/workspace/node-app/my-app-1.2.0.tgz" \
-                 "http://ec2-54-163-197-213.compute-1.amazonaws.com:8081/artifactory/node-app/node-app:${BUILD_NUMBER}.tgz"'
+                 "http://ec2-34-229-150-53.compute-1.amazonaws.com:8081/artifactory/node-app/node-app:${BUILD_NUMBER}.tgz"'
+
             }
         }
     }
