@@ -34,7 +34,7 @@ pipeline {
         stage('package') {
             steps {
                 sh 'rm -rf my-app-*.tgz || echo ""'
-                sh 'timeout 30 npm pack'
+                sh 'timeout 60 npm pack'
             }
         }
 
