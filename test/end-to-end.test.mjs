@@ -10,7 +10,13 @@ const { expect } = chai;
         let page;
 
         before(async () => {
-            browser = await puppeteer.launch();
+            browser = await puppeteer.launch({
+                headless: true,
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox'
+                ]
+            });
             page = await browser.newPage();
         });
 
