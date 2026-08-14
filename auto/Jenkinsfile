@@ -1,0 +1,71 @@
+pipeline {
+    agent {
+        docker {
+            image 'node-chromium:22'
+        }
+    }
+
+    environment {
+        HOME = "${WORKSPACE}"
+        PUPPETEER_EXECUTABLE_PATH = '/usr/bin/chromium'
+        npm_config_cache = '/tmp/npm-cache'
+    }
+
+    stages {
+
+        stage('dependencies install') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+
+        stage('start app') {
+            steps {
+                sh 'npm start &'
+                sh 'sleep 5'
+            }
+        }
+
+        stage('test') {
+            steps {
+                sh 'npm test -- --timeout 30000'
+            }
+        }
+
+        stage('package') {
+            steps {
+                sh '''
+                    # Supprime les dépendances utilisées uniquement pour les tests
+                    npm prune --omit=dev
+
+                    # Supprime les anciens fichiers de packaging
+                    rm -rf deploy-package
+                    rm -f node-app-*.tgz
+
+                    # Prépare le package de déploiement
+                    mkdir deploy-package
+
+                    cp index.cjs deploy-package/
+                    cp package.json deploy-package/
+                    cp package-lock.json deploy-package/
+                    cp -r public deploy-package/
+                    cp -r node_modules deploy-package/
+
+                    # Crée l'artifact final
+                    tar -czf node-app-${BUILD_NUMBER}.tgz \
+                        -C deploy-package .
+                '''
+            }
+        }
+
+        stage('upload artifact') {
+            steps {
+                sh '''
+                    curl -uadmin:TON_PASSWORD \
+                    -T "node-app-${BUILD_NUMBER}.tgz" \
+                    "http://ec2-34-229-150-53.compute-1.amazonaws.com:8081/artifactory/node-app/node-app-${BUILD_NUMBER}.tgz"
+                '''
+            }
+        }
+    }
+}
