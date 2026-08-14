@@ -8,6 +8,7 @@ pipeline {
     environment {
         HOME = "${WORKSPACE}"
         PUPPETEER_EXECUTABLE_PATH = '/usr/bin/chromium'
+        npm_config_cache = '/tmp/npm-cache'
     }
 
     stages {
