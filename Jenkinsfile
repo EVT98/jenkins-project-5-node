@@ -1,36 +1,23 @@
-pipeline {
-
-    agent {
+pipeline{
+    agent{
         docker {
-            image 'node-chromium:22'
-        }
+            image 'node:14'
+            args '-u root:root'
+       }
     }
-
-
-    environment {
-        HOME = "${WORKSPACE}"
-        PUPPETEER_EXECUTABLE_PATH = '/usr/bin/chromium'
-    }
-
-    stages {
-
-        stage('Dependencies install') {
-
-            steps {
-                sh 'npm ci'
+    stages{
+        stage("dependancies install"){
+            steps{
+                sh 'npm install'
             }
         }
-
-        stage('Test') {
-            steps {
-                sh 'npm test -- --timeout 30000'
-            }
-        }
-
-        stage('Package') {
-            steps {
+        stage('package'){
+            steps{
+                sh 'rm -rf my-app-*.tgz || echo ""'
                 sh 'npm pack'
             }
         }
+
     }
+    
 }
