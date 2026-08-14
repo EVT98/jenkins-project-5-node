@@ -3,11 +3,12 @@ pipeline {
     agent {
         docker {
             image 'node:22-alpine'
-            args '-u root:root'
         }
     }
 
+
     environment {
+        HOME = "${WORKSPACE}"
         PUPPETEER_EXECUTABLE_PATH = '/usr/bin/chromium'
     }
 
